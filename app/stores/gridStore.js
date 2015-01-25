@@ -1,26 +1,57 @@
 var Marty = require('marty');
 var GridConstants = require('../constants/gridConstants');
-
-// This is going to be our subset of data that's actually going to be displayed in our grid.
-var results = [];
+var _ = require('underscore');
 
 var GridStore = Marty.createStore({
   handlers: {
-    getPage: GridConstants.GET_PAGE
+    setCurrentPage: GridConstants.SET_CURRENT_PAGE,
+    setCurrentPageSize: GridConstants.SET_CURRENT_PAGE_SIZE
   },
   getInitialState: function() {
-    return {};
+    var page = 1, pageSize = 10;
+    var results = this.getPageOfResultsFromAllResults(page, pageSize);
+    return {
+      page: page,
+      pageSize: pageSize,
+      filter: '',
+      sortColumn: '',
+      sortAscending: false,
+      results: results,
+      isLoading: false
+    };
   },
   getResults: function() {
-    return results;
+    return this.state.results;
   },
-  getPage: function(filter, sortColumn, sortAscending, page, pageSize) {
-
+  updateResults: function(filter, sortColumn, sortAscending, page, pageSize) {
+    // if infinite, more logic, etc.
+    this.state.results = this.state.results.concat(getPageOfResultsFromAllResults(page, pageSize));
     this.hasChanged();
   },
-  filterResults: function() {
-
+  getCurrentPage: function() {
+    return this.state.page;
   },
+  setCurrentPage: function(page) {
+    this.state.page = page;
+    this.updateResults(this.state.filter, this.state.sortColumn, this.state.sortAscending, this.state.page, this.state.pageSize);
+  },
+  getCurrentPageSize: function() {
+    return this.state.pageSize;
+  },
+  setCurrentPageSize: function(pageSize) {
+    this.state.pageSize = pageSize;
+    this.state.page = 1; // Reset the page.
+    this.updateResults(this.state.filter, this.state.sortColumn, this.state.sortAscending, this.state.page, this.state.pageSize);
+  },
+  getIsLoading: function() {
+    return this.state.isLoading;
+  },
+  getPageOfResultsFromAllResults: function(page, pageSize) {
+    //This should interact with the data source to get the page at the given index
+    var number = page === 0 ? 0 : page * pageSize;
+
+    return allResults.slice(number, number + pageSize > allResults.length ? allResults.length : number + pageSize);
+  }
 });
 
 // This is just our random data that that's eventually going to be passed into our result array.

@@ -1,6 +1,7 @@
 var Griddle = require('griddle-react');
 var React = require('react');
 var GridStore = require('../stores/gridStore');
+var GridActionCreators = require('../actions/gridActionCreators');
 
 GridStore.addChangeListener(function (state) {
   console.log('Grid store has changed', state);
@@ -9,7 +10,10 @@ GridStore.addChangeListener(function (state) {
 var griddleFluxyWrapper = React.createClass({
   getInitialState: function () {
     return {
-      results: GridStore.getResults()
+      results: GridStore.getResults(),
+      resultsPerPage: GridStore.getCurrentPageSize(),
+      currentPage: GridStore.getCurrentPage(),
+      isLoading: GridStore.getIsLoading()
     };
   },
   componentDidMount: function () {
@@ -20,11 +24,11 @@ var griddleFluxyWrapper = React.createClass({
   },
   onUserStoreChanged: function () {
     this.setState({
-      results: GridStore.getResults()
+      results: GridStore.getResults(),
+      resultsPerPage: GridStore.getCurrentPageSize(),
+      currentPage: GridStore.getCurrentPage(),
+      isLoading: GridStore.getIsLoading()
     });
-  },
-  isLoading: function () {
-    // TODO:
   },
   sortAscending: function () {
     // TODO:
@@ -32,14 +36,14 @@ var griddleFluxyWrapper = React.createClass({
   sortColumn: function () {
     // TODO:
   },
-  currentPage: function () {
-    // TODO:
-  },
   maxPage: function () {
     // TODO:
   },
-  setPageSize: function () {
-    // TODO:
+  setPage: function (index, pageSize) {
+    GridActionCreators.setPage(index);
+  },
+  setPageSize: function (pageSize) {
+      GridActionCreators.setPageSize(pageSize);
   },
   setFilter: function () {
     // TODO:
@@ -47,18 +51,15 @@ var griddleFluxyWrapper = React.createClass({
   changeSort: function () {
     // TODO:
   },
-  setPage: function (index, pageSize) {
-    // TODO:
-  },
   render: function () {
     //  enableInfiniteScroll={true}
     return (
       <div className="home">
         <h1 ref="title">Hello world</h1>
-        <Griddle useExternal={true} externalSetPage={this.setPage} externalChangeSort={this.changeSort}
+        <Griddle useExternal={true} results={this.state.results} externalSetPage={this.setPage} externalChangeSort={this.changeSort}
                  externalSetFilter={this.setFilter} externalSetPageSize={this.setPageSize} externalMaxPage={this.maxPage}
-                 externalCurrentPage={this.currentPage} externalSortColumn={this.sortColumn} externalSortAscending={this.sortAscending}
-                 externalIsLoading={this.isLoading}/>
+                 externalCurrentPage={this.state.currentPage} externalSortColumn={this.sortColumn} externalSortAscending={this.sortAscending}
+                 externalIsLoading={this.state.isLoading} resultsPerPage={this.state.resultsPerPage}/>
       </div>
     );
   }

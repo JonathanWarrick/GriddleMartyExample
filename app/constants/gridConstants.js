@@ -1,8 +1,8 @@
 var Marty = require('Marty');
 
 var HomeConstants = Marty.createConstants([
-  "GET_PAGE",
-  "SORT_COLUMN"
+  "SET_CURRENT_PAGE",
+  "SET_CURRENT_PAGE_SIZE"
 ]);
 
 module.exports = HomeConstants;
