@@ -13,6 +13,7 @@ var griddleFluxyWrapper = React.createClass({
       results: GridStore.getResults(),
       resultsPerPage: GridStore.getCurrentPageSize(),
       currentPage: GridStore.getCurrentPage(),
+      maxPage:  GridStore.getMaxPage(),
       isLoading: GridStore.getIsLoading()
     };
   },
@@ -22,11 +23,12 @@ var griddleFluxyWrapper = React.createClass({
   componentWillUnmount: function (nextProps) {
     this.gridStoreListener.dispose();
   },
-  onUserStoreChanged: function () {
+  OnGridStoreChanged: function () {
     this.setState({
       results: GridStore.getResults(),
       resultsPerPage: GridStore.getCurrentPageSize(),
       currentPage: GridStore.getCurrentPage(),
+      maxPage:  GridStore.getMaxPage(),
       isLoading: GridStore.getIsLoading()
     });
   },
@@ -34,9 +36,6 @@ var griddleFluxyWrapper = React.createClass({
     // TODO:
   },
   sortColumn: function () {
-    // TODO:
-  },
-  maxPage: function () {
     // TODO:
   },
   setPage: function (index, pageSize) {
@@ -57,7 +56,7 @@ var griddleFluxyWrapper = React.createClass({
       <div className="home">
         <h1 ref="title">Hello world</h1>
         <Griddle useExternal={true} results={this.state.results} externalSetPage={this.setPage} externalChangeSort={this.changeSort}
-                 externalSetFilter={this.setFilter} externalSetPageSize={this.setPageSize} externalMaxPage={this.maxPage}
+                 externalSetFilter={this.setFilter} externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
                  externalCurrentPage={this.state.currentPage} externalSortColumn={this.sortColumn} externalSortAscending={this.sortAscending}
                  externalIsLoading={this.state.isLoading} resultsPerPage={this.state.resultsPerPage}/>
       </div>
