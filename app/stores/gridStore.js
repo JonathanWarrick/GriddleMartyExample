@@ -11,20 +11,23 @@ var GridStore = Marty.createStore({
     setFilter: GridConstants.SET_FILTER
   },
   getInitialState: function() {
-    var page = 0, pageSize = 10;
-    var results = this.getPageOfResultsFromAllResults(page, pageSize);
-    var maxPage = Math.ceil(allResults.length / pageSize);
+    var page = 0, pageSize = 10, maxPage = Math.ceil(allResults.length / pageSize);
+
+    //This should interact with the data source to get the page at the given index
+    var index = page === 0 ? 0 : page * pageSize;
+
+    var results = allResults.slice(index, index + pageSize > allResults.length ? allResults.length : index + pageSize);
 
     return {
       page: page,
       pageSize: pageSize,
       maxPage: maxPage,
       filter: '',
-      sortColumn: '',
+      sortColumn: 'id',
       sortAscending: true,
       results: results,
       isLoading: false,
-      infinite: false
+      infinite: true
     };
   },
   getResults: function() {
@@ -114,12 +117,6 @@ var GridStore = Marty.createStore({
     this.state.filter = filter;
     this.state.page = 0; // Reset the page.
     this.updateResults();
-  },
-  getPageOfResultsFromAllResults: function(page, pageSize) {
-    //This should interact with the data source to get the page at the given index
-    var number = page === 0 ? 0 : page * pageSize;
-
-    return allResults.slice(number, number + pageSize > allResults.length ? allResults.length : number + pageSize);
   }
 });
 
