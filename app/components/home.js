@@ -7,7 +7,7 @@ var Home = React.createClass({
   render: function () {
     return (
       <div className="home">
-        <h1 ref="title">Hello world</h1>
+        <h1 ref="title">Griddle + Marty.js</h1>
         <GriddleFluxyWrapper />
       </div>
     );

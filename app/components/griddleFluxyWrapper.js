@@ -14,7 +14,9 @@ var griddleFluxyWrapper = React.createClass({
       resultsPerPage: GridStore.getCurrentPageSize(),
       currentPage: GridStore.getCurrentPage(),
       maxPage:  GridStore.getMaxPage(),
-      isLoading: GridStore.getIsLoading()
+      isLoading: GridStore.getIsLoading(),
+      sortColumn: GridStore.getSortColumn(),
+      sortAscending: GridStore.getSortAscending()
     };
   },
   componentDidMount: function () {
@@ -29,35 +31,30 @@ var griddleFluxyWrapper = React.createClass({
       resultsPerPage: GridStore.getCurrentPageSize(),
       currentPage: GridStore.getCurrentPage(),
       maxPage:  GridStore.getMaxPage(),
-      isLoading: GridStore.getIsLoading()
+      isLoading: GridStore.getIsLoading(),
+      sortColumn: GridStore.getSortColumn(),
+      sortAscending: GridStore.getSortAscending()
     });
-  },
-  sortAscending: function () {
-    // TODO:
-  },
-  sortColumn: function () {
-    // TODO:
   },
   setPage: function (index, pageSize) {
     GridActionCreators.setPage(index);
   },
   setPageSize: function (pageSize) {
-      GridActionCreators.setPageSize(pageSize);
+    GridActionCreators.setPageSize(pageSize);
   },
   setFilter: function () {
     // TODO:
   },
-  changeSort: function () {
-    // TODO:
+  changeSort: function (sort, sortAscending) {
+    GridActionCreators.setSort(sort, sortAscending);
   },
   render: function () {
     //  enableInfiniteScroll={true}
     return (
       <div className="home">
-        <h1 ref="title">Hello world</h1>
         <Griddle useExternal={true} results={this.state.results} externalSetPage={this.setPage} externalChangeSort={this.changeSort}
                  externalSetFilter={this.setFilter} externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
-                 externalCurrentPage={this.state.currentPage} externalSortColumn={this.sortColumn} externalSortAscending={this.sortAscending}
+                 externalCurrentPage={this.state.currentPage} externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending}
                  externalIsLoading={this.state.isLoading} resultsPerPage={this.state.resultsPerPage}/>
       </div>
     );

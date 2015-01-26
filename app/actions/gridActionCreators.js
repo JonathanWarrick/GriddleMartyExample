@@ -8,6 +8,9 @@ var GridActionCreators = Marty.createActionCreators({
   setPageSize: GridConstants.SET_CURRENT_PAGE_SIZE(function (pageSize) {
     this.dispatch(pageSize);
   }),
+  setSort: GridConstants.SET_SORT(function(sort, sortAscending) {
+    this.dispatch(sort, sortAscending);
+  })
 });
 
 module.exports = GridActionCreators;

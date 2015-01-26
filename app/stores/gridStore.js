@@ -6,7 +6,8 @@ var allResults = require('./gridStore_fakeData');
 var GridStore = Marty.createStore({
   handlers: {
     setCurrentPage: GridConstants.SET_CURRENT_PAGE,
-    setCurrentPageSize: GridConstants.SET_CURRENT_PAGE_SIZE
+    setCurrentPageSize: GridConstants.SET_CURRENT_PAGE_SIZE,
+    setSort: GridConstants.SET_SORT
   },
   getInitialState: function() {
     var page = 0, pageSize = 10;
@@ -27,11 +28,11 @@ var GridStore = Marty.createStore({
   getResults: function() {
     return this.state.results;
   },
-  updateResults: function(filter, sortColumn, sortAscending, page, pageSize) {
+  updateResults: function() {
     // if infinite, more logic, etc.
     // this.state.results = this.state.results.concat(this.getPageOfResultsFromAllResults(page, pageSize));
 
-    this.state.results = this.getPageOfResultsFromAllResults(page, pageSize);
+    this.state.results = this.getPageOfResultsFromAllResults(this.state.page, this.state.pageSize);
 
     this.hasChanged();
   },
@@ -40,7 +41,7 @@ var GridStore = Marty.createStore({
   },
   setCurrentPage: function(page) {
     this.state.page = page;
-    this.updateResults(this.state.filter, this.state.sortColumn, this.state.sortAscending, this.state.page, this.state.pageSize);
+    this.updateResults();
   },
   getCurrentPageSize: function() {
     return this.state.pageSize;
@@ -48,7 +49,18 @@ var GridStore = Marty.createStore({
   setCurrentPageSize: function(pageSize) {
     this.state.pageSize = pageSize;
     this.state.page = 1; // Reset the page.
-    this.updateResults(this.state.filter, this.state.sortColumn, this.state.sortAscending, this.state.page, this.state.pageSize);
+    this.updateResults();
+  },
+  getSortColumn: function() {
+    return this.state.sortColumn;
+  },
+  getSortAscending: function() {
+    return this.state.sortAscending;
+  },
+  setSort: function(sort, sortAscending) {
+    this.state.sortColumn = sort;
+    this.state.sortAscending = sortAscending
+    this.updateResults();
   },
   getMaxPage: function() {
     return this.state.maxPage;
