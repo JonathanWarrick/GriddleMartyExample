@@ -10,6 +10,9 @@ var GridActionCreators = Marty.createActionCreators({
   }),
   setSort: GridConstants.SET_SORT(function(sort, sortAscending) {
     this.dispatch(sort, sortAscending);
+  }),
+  setFilter: GridConstants.SET_FILTER(function(filter) {
+    this.dispatch(filter);
   })
 });
 

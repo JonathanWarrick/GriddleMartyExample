@@ -42,8 +42,8 @@ var griddleFluxyWrapper = React.createClass({
   setPageSize: function (pageSize) {
     GridActionCreators.setPageSize(pageSize);
   },
-  setFilter: function () {
-    // TODO:
+  setFilter: function (filter) {
+    GridActionCreators.setFilter(filter);
   },
   changeSort: function (sort, sortAscending) {
     GridActionCreators.setSort(sort, sortAscending);
@@ -55,7 +55,7 @@ var griddleFluxyWrapper = React.createClass({
         <Griddle useExternal={true} results={this.state.results} externalSetPage={this.setPage} externalChangeSort={this.changeSort}
                  externalSetFilter={this.setFilter} externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
                  externalCurrentPage={this.state.currentPage} externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending}
-                 externalIsLoading={this.state.isLoading} resultsPerPage={this.state.resultsPerPage}/>
+                 externalIsLoading={this.state.isLoading} resultsPerPage={this.state.resultsPerPage} showFilter={true}/>
       </div>
     );
   }
