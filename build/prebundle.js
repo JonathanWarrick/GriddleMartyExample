@@ -8,11 +8,9 @@ var appDir = path.join(rootDir, "app");
 var FILES_TO_IGNORE = [".DS_Store"];
 var DIRECTORIES_TO_SEARCH = [
   "actions",
-  "sources",
   "components",
   "constants",
-  "stores",
-  "utils"
+  "stores"
 ];
 
 module.exports = function (bundle) {
