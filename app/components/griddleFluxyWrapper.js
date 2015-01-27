@@ -3,10 +3,6 @@ var React = require('react');
 var GridStore = require('../stores/gridStore');
 var GridActionCreators = require('../actions/gridActionCreators');
 
-GridStore.addChangeListener(function (state) {
-  console.log('Grid store has changed', state);
-});
-
 var griddleFluxyWrapper = React.createClass({
   getInitialState: function () {
     return {
@@ -19,7 +15,7 @@ var griddleFluxyWrapper = React.createClass({
       sortAscending: GridStore.getSortAscending()
     };
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
     this.gridStoreListener = GridStore.addChangeListener(this.OnGridStoreChanged);
   },
   componentWillUnmount: function (nextProps) {
