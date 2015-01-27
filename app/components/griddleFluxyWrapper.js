@@ -5,6 +5,7 @@ var GridActionCreators = require('../actions/gridActionCreators');
 
 var griddleFluxyWrapper = React.createClass({
   getInitialState: function () {
+    // Grab all values from grid store.
     return this.GetGridStoreState();
   },
   componentWillMount: function () {
@@ -14,6 +15,7 @@ var griddleFluxyWrapper = React.createClass({
     this.gridStoreListener.dispose();
   },
   OnGridStoreChanged: function () {
+    // Grab all values from grid store.
     var state = this.GetGridStoreState();
 
     this.setState(state);
