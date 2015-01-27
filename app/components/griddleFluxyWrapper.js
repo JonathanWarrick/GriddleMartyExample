@@ -5,6 +5,20 @@ var GridActionCreators = require('../actions/gridActionCreators');
 
 var griddleFluxyWrapper = React.createClass({
   getInitialState: function () {
+    return this.GetGridStoreState();
+  },
+  componentWillMount: function () {
+    this.gridStoreListener = GridStore.addChangeListener(this.OnGridStoreChanged);
+  },
+  componentWillUnmount: function (nextProps) {
+    this.gridStoreListener.dispose();
+  },
+  OnGridStoreChanged: function () {
+    var state = this.GetGridStoreState();
+
+    this.setState(state);
+  },
+  GetGridStoreState: function() {
     return {
       results: GridStore.getResults(),
       resultsPerPage: GridStore.getCurrentPageSize(),
@@ -14,25 +28,6 @@ var griddleFluxyWrapper = React.createClass({
       sortColumn: GridStore.getSortColumn(),
       sortAscending: GridStore.getSortAscending()
     };
-  },
-  componentWillMount: function () {
-    this.gridStoreListener = GridStore.addChangeListener(this.OnGridStoreChanged);
-  },
-  componentWillUnmount: function (nextProps) {
-    this.gridStoreListener.dispose();
-  },
-  OnGridStoreChanged: function () {
-    var state = {
-      results: GridStore.getResults(),
-      resultsPerPage: GridStore.getCurrentPageSize(),
-      currentPage: GridStore.getCurrentPage(),
-      maxPage:  GridStore.getMaxPage(),
-      isLoading: GridStore.getIsLoading(),
-      sortColumn: GridStore.getSortColumn(),
-      sortAscending: GridStore.getSortAscending()
-    };
-
-    this.setState(state);
   },
   setPage: function (index, pageSize) {
     GridActionCreators.setPage(index);
