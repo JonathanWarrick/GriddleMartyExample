@@ -11,29 +11,29 @@ var GridStore = Marty.createStore({
     setFilter: GridConstants.SET_FILTER
   },
   getInitialState: function() {
-    var page = 0, pageSize = 10, maxPage = Math.ceil(allResults.length / pageSize);
-
-    //This should interact with the data source to get the page at the given index
-    var index = page === 0 ? 0 : page * pageSize;
-
-    var results = allResults.slice(index, index + pageSize > allResults.length ? allResults.length : index + pageSize);
-
-    return {
-      page: page,
+    var pageSize = 10;
+    var newState = {
+      page: 0,
       pageSize: pageSize,
-      maxPage: maxPage,
+      maxPage: Math.ceil(allResults.length / pageSize),
       filter: '',
       sortColumn: 'id',
       sortAscending: true,
-      results: results,
+      results: [],
       isLoading: false,
       infinite: true
     };
+
+    return this.updateStateResults(newState);
   },
   getResults: function() {
     return this.state.results;
   },
   updateResults: function() {
+    this.state = this.updateStateResults(this.state);
+    this.hasChanged();
+  },
+  updateStateResults: function(newState) {
 
     // A lot of the logic should live on the server -- This is more to represent a self-contained example.
 
@@ -50,12 +50,12 @@ var GridStore = Marty.createStore({
       return sortedData;
     }
 
-    //filtering should generally occur on the server (or wherever)
-    //this is a lot of code for what should normally just be a method that is used to pass data back and forth
-    var sortedData = sortData(this.state.sortColumn, this.state.sortAscending, allResults);
+    // Sort the data.
+    var sortedData = sortData(newState.sortColumn, newState.sortAscending, allResults);
 
-    if(this.state.filter !== ""){
-      var filter = this.state.filter;
+    // Filter the data, if necessary.
+    if(newState.filter !== ""){
+      var filter = newState.filter;
       sortedData = _.filter(sortedData,
         function(item) {
             var arr = _.values(item);
@@ -69,13 +69,15 @@ var GridStore = Marty.createStore({
         });
     }
 
-    //This should interact with the data source to get the page at the given index
-    var index = this.state.page === 0 ? 0 : this.state.page * this.state.pageSize;
+    // Grab the index and slice the array of sorted, filtered data.
+    var index = newState.page === 0 ? 0 : newState.page * newState.pageSize;
 
-    this.state.results = sortedData.slice(this.state.infinite ? 0 : index, index + this.state.pageSize > sortedData.length ? sortedData.length : index + this.state.pageSize);
-    this.state.maxPage = Math.ceil(sortedData.length / this.state.pageSize);
+    newState.results = sortedData.slice(newState.infinite ? 0 : index, index + newState.pageSize > sortedData.length ? sortedData.length : index + newState.pageSize);
+    newState.maxPage = Math.ceil(sortedData.length / newState.pageSize);
 
-    this.hasChanged();
+    // As I mentioned above, this is likely going to happen on a server
+    // or something along those lines, but this is just for a self-contained example.
+    return newState;
   },
   getCurrentPage: function() {
     return this.state.page;
